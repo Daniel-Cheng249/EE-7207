@@ -30,10 +30,10 @@ class RBF:
             for xi, x in enumerate(X):
                 G[xi, ci] = self._basisfunc(c, x)
         return G
-
-    def train(self, X, Y):
+    
         """ X: matrix of dimensions 330 x 33
             y: column vector of dimension 330 x 1 """
+    def train(self, X, Y):
         # random center vectors from training set, SOM/K means was not used here
         rnd_idx = numpy.random.permutation(X.shape[0])[:self.num_centers]
         self.centers = [X[i, :] for i in rnd_idx]
@@ -61,24 +61,22 @@ class RBF:
 
 if __name__ == '__main__':
 
-    file1 = 'C:\\Users\\程泽\\Desktop\\Continuous Assessment\\data_train.mat'
-    file2 = 'C:\\Users\\程泽\\Desktop\\Continuous Assessment\\label_train.mat'
-    file3 = 'C:\\Users\\程泽\\Desktop\\Continuous Assessment\\data_test.mat'
-    data_train = loadmat(file1, mat_dtype=True)
-    label_train = loadmat(file2, mat_dtype=True)
-    data_test = loadmat(file3, mat_dtype=True)
-
-    x_dt = data_train.get('data_train')
-    y_lt = label_train.get('label_train')
-    x_test = data_test.get('data_test')
-    # show x_dt is 330*33 matrix;show y_lt is 330*1 matrix; x_dt transpose can be multiplied y_lt
-    # print(x_dt)
-    # print(y_lt)
+      PATH = 'Data/'
+      data_train = loadmat(PATH + 'data_train.mat')['data_train']
+      label_train = loadmat(PATH + 'label_train.mat')['label_train']
+      data_test = loadmat(PATH + 'data_test.mat')['data_test']    
+    
+#     file1 = 'C:\\Users\\程泽\\Desktop\\Continuous Assessment\\data_train.mat'
+#     file2 = 'C:\\Users\\程泽\\Desktop\\Continuous Assessment\\label_train.mat'
+#     file3 = 'C:\\Users\\程泽\\Desktop\\Continuous Assessment\\data_test.mat'
+#     data_train = loadmat(file1, mat_dtype=True)
+#     label_train = loadmat(file2, mat_dtype=True)
+#     data_test = loadmat(file3, mat_dtype=True)
 
     # rbf train
     rbf = RBF(33, 30, 1)
-    rbf.train(x_dt, y_lt)
-    y_test = rbf.test(x_test)
+    rbf.train(data_train, label_train)
+    y_test = rbf.test(data_test)
     print('the output of test data is:', y_test)
     # print result
     for res in y_test:
