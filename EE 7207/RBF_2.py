@@ -3,7 +3,7 @@
 
 from scipy.io import loadmat
 from scipy.linalg import norm, pinv, inv
-import numpy
+import numpy as np
 from sklearn.cluster import KMeans
 
 
@@ -14,18 +14,18 @@ class RBF:
         self.num_centers = num_centers
         self.sigma = sigma
         self.outdim = outdim
-        self.centers = [numpy.random.uniform(-1, 1, indim) for i in range(num_centers)]
-        self.W = numpy.random.random((self.num_centers, self.outdim))
+        self.centers = [np.random.uniform(-1, 1, indim) for i in range(num_centers)]
+        self.W = np.random.random((self.num_centers, self.outdim))
 
         # RBF Gaussian function
-
+        
     def _basisfunc(self, xk, d):
         assert len(d) == self.indim
-        return numpy.exp((-1 / (2 * self.sigma ** 2)) * norm(xk - d) ** 2)
+        return np.exp((-1 / (2 * self.sigma ** 2)) * norm(xk - d) ** 2)
 
     # calculate activations of RBFs
     def _calcAct(self, X):
-        G = numpy.zeros((X.shape[0], self.num_centers), float)
+        G = np.zeros((X.shape[0], self.num_centers), float)
         for ci, c in enumerate(self.centers):
             for xi, x in enumerate(X):
                 G[xi, ci] = self._basisfunc(c, x)
@@ -35,7 +35,7 @@ class RBF:
     def train(self, X, Y):
 
         # # i. random centers selection from training set
-        # rnd_idx = numpy.random.permutation(X.shape[0])[:self.num_centers]
+        # rnd_idx = np.random.permutation(X.shape[0])[:self.num_centers]
         # self.centers = [X[i, :] for i in rnd_idx]
         # print("center selected randomly:", self.centers)
 
@@ -50,18 +50,18 @@ class RBF:
         print(G)
 
         # # calculate output weights (pseudoinverse)
-        # self.W = numpy.dot(pinv(G), Y)
+        # self.W = np.dot(pinv(G), Y)
 
         # calculate output weights (linear least square estimate)
-        gtrandot_g = numpy.dot(numpy.transpose(G), G)
-        self.W = inv(gtrandot_g) @ numpy.transpose(G) @ Y
+        GT_G = np.dot(np.transpose(G), G)
+        self.W = inv(GT_G) @ np.transpose(G) @ Y
         print('Output weights W is:\n', self.W)
 
         # X: input dimensions 330 x 33
 
     def test(self, X):
         G = self._calcAct(X)
-        Y = numpy.dot(G, self.W)
+        Y = np.dot(G, self.W)
         return Y
 
 
@@ -79,12 +79,12 @@ if __name__ == '__main__':
      label_train = loadmat(PATH + 'label_train.mat')['label_train']
      data_test = loadmat(PATH + 'data_test.mat')['data_test']  
 
-    # RBF train
+    # RBF training process
     # indim = 33, num_centers = 10, sigma = 0.25, outdim = 1
     rbf = RBF(33, 10, 0.25, 1)
     rbf.train(data_train, label_train)
     test_result = rbf.test(data_test)
     print('the output of test data is:\n', test_result)
-    # print result
+    # print result as 1/-1
     for res in test_result:
         print('1') if res > 0 else print('-1')
