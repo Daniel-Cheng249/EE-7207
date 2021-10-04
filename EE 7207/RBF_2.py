@@ -67,13 +67,17 @@ class RBF:
 
 if __name__ == '__main__':
 
-    file1 = 'C:\\Users\\程泽\\Desktop\\Continuous Assessment\\data_train.mat'
-    file2 = 'C:\\Users\\程泽\\Desktop\\Continuous Assessment\\label_train.mat'
-    file3 = 'C:\\Users\\程泽\\Desktop\\Continuous Assessment\\data_test.mat'
+#     file1 = 'C:\\Users\\程泽\\Desktop\\Continuous Assessment\\data_train.mat'
+#     file2 = 'C:\\Users\\程泽\\Desktop\\Continuous Assessment\\label_train.mat'
+#     file3 = 'C:\\Users\\程泽\\Desktop\\Continuous Assessment\\data_test.mat'
+#     data_train = loadmat(file1, mat_dtype=True)['data_train']
+#     label_train = loadmat(file2, mat_dtype=True)['label_train']
+#     data_test = loadmat(file3, mat_dtype=True)['data_test']
 
-    data_train = loadmat(file1, mat_dtype=True)['data_train']
-    label_train = loadmat(file2, mat_dtype=True)['label_train']
-    data_test = loadmat(file3, mat_dtype=True)['data_test']
+     PATH = 'Data/'
+     data_train = loadmat(PATH + 'data_train.mat')['data_train']
+     label_train = loadmat(PATH + 'label_train.mat')['label_train']
+     data_test = loadmat(PATH + 'data_test.mat')['data_test']  
 
     # RBF train
     # indim = 33, num_centers = 10, sigma = 0.25, outdim = 1
