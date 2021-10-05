@@ -40,7 +40,7 @@ class RBF:
         # print("center selected randomly:", self.centers)
 
         # ii. K means cluster to determine centers here
-        model = KMeans(n_clusters=self.num_centers, max_iter=1500)
+        model = KMeans(n_clusters=self.num_centers, max_iter=1000)
         model.fit(data_train)
         self.centers = model.cluster_centers_
         print("centers selected by K Means clustering:\n", self.centers)
@@ -77,14 +77,30 @@ if __name__ == '__main__':
     PATH = 'Data/'
     data_train = loadmat(PATH + 'data_train.mat')['data_train']
     label_train = loadmat(PATH + 'label_train.mat')['label_train']
-    data_test = loadmat(PATH + 'data_test.mat')['data_test']  
+    data_test = loadmat(PATH + 'data_test.mat')['data_test']
+
+    # separate data set as validation data set/training data set (20/310)
+    data_x_val = data_train[0:20, :]
+    data_x_train = data_train[20:329, :]
+    label_x_val = label_train[0:20, :]
+    label_x_train = label_train[20:329, :]
+    # print('label_x_val is:\n', np.transpose(label_x_val))
 
     # RBF training process
-    # indim = 33, num_centers = 10, sigma = 0.25, outdim = 1
-    rbf = RBF(33, 10, 0.25, 1)
-    rbf.train(data_train, label_train)
+    # indim = 33, num_centers = 15, sigma = 2, outdim = 1
+    rbf = RBF(33, 15, 2, 1)
+    rbf.train(data_x_train, label_x_train)
+
+    # RBF testing process
     test_result = rbf.test(data_test)
     print('the output of test data is:\n', test_result)
     # print result as 1/-1
     for res in test_result:
         print('1') if res > 0 else print('-1')
+
+    # # validation accuracy comparison
+    # val_test_result = rbf.test(data_x_val)
+    # print('the output of validation data is:\n', val_test_result)
+    # # print result as 1/-1
+    # for rel in val_test_result:
+    #     print('1') if rel > 0 else print('-1')
