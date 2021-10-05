@@ -1,6 +1,6 @@
 # Editor Name: Daniel Cheng
 # Edit Time: 15:41 2021/9/26
-# next step: k means or SOM NN to get centers/matrix splice to get a 30*30 validation set
+# next step: k means or SOM NN to get centers/matrix splice to get a 10*33 validation set
 
 from scipy.io import loadmat
 from scipy.linalg import norm, pinv, inv
@@ -31,8 +31,7 @@ class RBF:
                 G[xi, ci] = self._basisfunc(c, x)
         return G
     
-        """ X: matrix of dimensions 330 x 33
-            y: column vector of dimension 330 x 1 """
+        # X: matrix of dimensions 330 x 33；y: column vector of dimension 330 x 1
     def train(self, X, Y):
         # random center vectors from training set, SOM/K means was not used here
         rnd_idx = numpy.random.permutation(X.shape[0])[:self.num_centers]
@@ -61,10 +60,10 @@ class RBF:
 
 if __name__ == '__main__':
 
-      PATH = 'Data/'
-      data_train = loadmat(PATH + 'data_train.mat')['data_train']
-      label_train = loadmat(PATH + 'label_train.mat')['label_train']
-      data_test = loadmat(PATH + 'data_test.mat')['data_test']    
+    PATH = 'Data/'
+    data_train = loadmat(PATH + 'data_train.mat')['data_train']
+    label_train = loadmat(PATH + 'label_train.mat')['label_train']
+    data_test = loadmat(PATH + 'data_test.mat')['data_test']
     
 #     file1 = 'C:\\Users\\程泽\\Desktop\\Continuous Assessment\\data_train.mat'
 #     file2 = 'C:\\Users\\程泽\\Desktop\\Continuous Assessment\\label_train.mat'
