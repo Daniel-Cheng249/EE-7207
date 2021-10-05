@@ -4,16 +4,18 @@
 from scipy.io import loadmat
 from sklearn import svm
 from sklearn.model_selection import train_test_split
+import numpy as np
 
 PATH = 'Data/'
 data_train = loadmat(PATH + 'data_train.mat')['data_train']
 label_train = loadmat(PATH + 'label_train.mat')['label_train']
-data_test = loadmat(PATH + 'data_test.mat')['data_test']  
+data_test = loadmat(PATH + 'data_test.mat')['data_test']
 
 # separate training data into 2 sets: training set/validation set = 8/2
 x_train, x_val, x_train_label, x_val_label = train_test_split(data_train, label_train, random_state=1, train_size=0.8, test_size=0.2)
 
-model_train = svm.SVC(C=1, kernel='rbf', gamma=0.1, decision_function_shape='ovo')
+# C=1, kernel='rbf', gamma=0.5
+model_train = svm.SVC(C=1, kernel='rbf', gamma=0.5, decision_function_shape='ovo')
 model_train.fit(x_train, x_train_label.ravel()) # convert x_train_label into 1-D ndarray
 
 train_score = model_train.score(x_train, x_train_label)
